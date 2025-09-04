@@ -1,17 +1,17 @@
+### Install
+```shell
+npm install
+npm link
+```
+
 ### Usage
 Copy `.env.example` to `.env` and setup needed params.
 
 If needed, convert a source book file (epub, fb2) to txt:
 ```
-npm run convert
-```
-Run the split action:
-```
-npm run split
-```
-Run the main script:
-```
-npm run start
+app convert book.epub book.txt
+app split book.txt ./chunks
+app process
 ```
 
 ---
