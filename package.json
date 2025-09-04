@@ -1,0 +1,22 @@
+{
+  "name": "book-dub",
+  "version": "1.0.0",
+  "author": "Konstantin X <Konstantin-X@mail.ua>",
+  "description": "Set of scripts to extract text from epub and convert it to wav using Google GenAI TTS API",
+  "main": "index.js",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "convert": "node extract_from_epub.js",
+    "split": "node split.js",
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@google/genai": "^1.16.0",
+    "better-sqlite3": "^12.2.0",
+    "dotenv": "^17.2.1",
+    "epub2": "^3.0.2",
+    "html-to-text": "^9.0.5",
+    "wav": "^1.0.2"
+  }
+}

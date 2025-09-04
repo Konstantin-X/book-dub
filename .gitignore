@@ -1,0 +1,17 @@
+book_audios/
+book_blocks/
+book_files/
+logs/
+node_modules/
+
+.env
+.idea
+
+*.db
+*.mp3
+*.txt
+*.epub
+*.fb2
+*.wav
+
+seed_keys.js
