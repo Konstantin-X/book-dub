@@ -7,11 +7,22 @@ npm link
 ### Usage
 Copy `.env.example` to `.env` and setup needed params.
 
+Seed API key:
+```
+app seed
+```
+
+
 If needed, convert a source book file (epub, fb2) to txt:
 ```
-app convert book.epub book.txt
-app split book.txt ./chunks
+app convert
+app split
 app process
+```
+
+Convert wav to mp3:
+```
+app encode
 ```
 
 ---

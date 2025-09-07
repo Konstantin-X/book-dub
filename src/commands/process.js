@@ -1,34 +1,58 @@
-import fs from "fs/promises";
-import path from "path";
-import { initDb, getNextChunk, updateStatus } from "../services/db.js";
-import { sendToApi } from "../services/apiService.js";
-import { log } from "../utils/logger.js";
+import * as DB from "../services/db.js";
+import {fetchWithRetry} from "../services/apiService.js";
+import {log, logError} from "../utils/logger.js";
+import { sleep } from "../utils/common.js";
+
+async function worker(workerId) {
+    let isWork = true;
+
+    log(`[Worker ${workerId}] spawn`);
+
+    while (isWork) {
+        const block = DB.getNextBlock();
+
+        if (!block) {
+            log('No more blocks to process');
+            break;
+        }
+
+        DB.updateBlock(block.id, 'process' ,'process');
+
+        log(`Worker ${workerId} > Block: ${block.id}`);
+
+        try {
+            isWork = await fetchWithRetry(block);
+
+            if (isWork) {
+                DB.blockDone(block.id, 'done');
+            } else {
+                DB.blockDoneWithError(block.id);
+            }
+        } catch (e) {
+            logError(`Worker ${workerId} > ERROR: Final fail for Id = ${block.id}`);
+
+            DB.updateBlock(block.id, 'error', 'ERROR: ' + e.message);
+        }
+    }
+
+    log(`[Worker ${workerId}] down`, 'warn');
+}
 
 export async function runProcess() {
-    const db = initDb();
-    const chunk = getNextChunk(db);
+    const workersCount = process.env.MAX_WORKER_COUNT;
+    const promises = [];
 
-    if (!chunk) {
-        log("No chunks to process");
-        return;
+    for (let i = 0; i < workersCount; i++) {
+        promises.push(worker(i));
+
+        if (i < workersCount - 1) {
+            log("⏳ Waiting 100 sec before next worker...");
+
+            await sleep(100_000);
+        }
     }
 
-    try {
-        updateStatus(db, chunk.id, "process");
+    await Promise.all(promises);
 
-        const content = await fs.readFile(chunk.filename, "utf8");
-        const result = await sendToApi(content);
-
-        const outFile = path.join(
-            path.dirname(chunk.filename),
-            `result_${path.basename(chunk.filename)}`
-        );
-        await fs.writeFile(outFile, result, "utf8");
-
-        updateStatus(db, chunk.id, "done");
-        log(`Processed chunk ${chunk.id}, saved to ${outFile}`);
-    } catch (err) {
-        updateStatus(db, chunk.id, "error");
-        console.error(`Error processing chunk ${chunk.id}:`, err.message);
-    }
+    log("✅ All workers finished");
 }

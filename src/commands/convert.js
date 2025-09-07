@@ -1,11 +1,26 @@
 import { extractEpub } from "../services/epubService.js";
-import { log } from "../utils/logger.js";
+import { logError } from "../utils/logger.js";
+import path from "path";
 
-export async function runConvert(epubFile, outTxt) {
+const SRC_FILE = process.env.SRC_FILE;
+
+export async function runConvert() {
     try {
-        await extractEpub(epubFile, outTxt);
-        log(`Converted: ${epubFile} → ${outTxt}`);
-    } catch (err) {
-        console.error("Error:", err.message);
+        const extension = path.extname(SRC_FILE).toLowerCase();
+
+        switch (extension) {
+            case '.epub':
+                await extractEpub(SRC_FILE);
+                break;
+
+            case '.fb2':
+                //await extractFB2();
+                //break;
+
+            default:
+                throw new Error(`Unsupported file extension: ${extension}`);
+        }
+    } catch (e) {
+        logError("Error: " + e.message);
     }
 }

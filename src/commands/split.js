@@ -1,21 +1,8 @@
-import { splitFileIntoChunks } from "../services/fileService.js";
-import { initDb, insertChunk } from "../services/db.js";
-import { log } from "../utils/logger.js";
+import { splitFileIntoBlocks } from "../services/fileService.js";
 
-export async function runSplit(txtFile, outDir) {
+export async function runSplit() {
     try {
-        const db = initDb();
-        const chunks = await splitFileIntoChunks(txtFile, outDir, 1000);
-
-        for (const chunk of chunks) {
-            insertChunk(db, {
-                filename: chunk.filename,
-                content_length: chunk.length,
-                status: "new",
-            });
-        }
-
-        log(`Split done. Saved ${chunks.length} chunks into ${outDir}`);
+        await splitFileIntoBlocks();
     } catch (err) {
         console.error("Error:", err.message);
     }
