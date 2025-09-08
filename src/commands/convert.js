@@ -1,16 +1,13 @@
 import { extractEpub } from "../services/epubService.js";
 import { logError } from "../utils/logger.js";
-import path from "path";
-
-const SRC_FILE = process.env.SRC_FILE;
 
 export async function runConvert() {
     try {
-        const extension = path.extname(SRC_FILE).toLowerCase();
+        const extension = '.epub';
 
         switch (extension) {
             case '.epub':
-                await extractEpub(SRC_FILE);
+                await extractEpub();
                 break;
 
             case '.fb2':
@@ -22,5 +19,7 @@ export async function runConvert() {
         }
     } catch (e) {
         logError("Error: " + e.message);
+
+        throw e;
     }
 }

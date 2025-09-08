@@ -4,6 +4,7 @@ import path from "path";
 import {convert} from "html-to-text";
 import { log } from "../utils/logger.js";
 
+export const BOOK_NAME = process.env.BOOK_NAME;
 export const EPUB_DIR = path.join(path.dirname(''), 'book_files/epubs/');
 export const TEXT_DIR = path.join(path.dirname(''), 'book_files/texts/');
 
@@ -43,11 +44,11 @@ function extractEpubText(filePath) {
     });
 }
 
-export async function extractEpub(epubFile) {
-    const bookText = await extractEpubText(EPUB_DIR + epubFile);
-    const TEXT_FILE = TEXT_DIR + process.env.BOOK_NAME + ".txt";
+export async function extractEpub() {
+    const bookText = await extractEpubText(EPUB_DIR + BOOK_NAME + '.epub');
+    const bookFile = TEXT_DIR + BOOK_NAME + ".txt";
 
-    fs.writeFileSync(TEXT_FILE, bookText, "utf8");
+    fs.writeFileSync(bookFile, bookText, "utf8");
 
-    log('Convert completed: ' + TEXT_FILE);
+    log('Convert completed: ' + bookFile);
 }
