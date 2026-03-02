@@ -1,5 +1,5 @@
 ### Install
-```shell
+```
 npm install
 npm link
 ```
@@ -11,7 +11,6 @@ Seed API key:
 ```
 app seed
 ```
-
 
 If needed, convert a source book file (epub, fb2) to txt:
 ```

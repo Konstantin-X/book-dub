@@ -5,7 +5,7 @@ import {log, logError} from "../utils/logger.js";
 import { sleep } from "../utils/common.js";
 import {getBlockPath, getBlockAudioPath, saveAudioFile } from "../services/fileService.js";
 
-const PROMPT_PREFIX = 'Read aloud in a warm and friendly tone at 150% speed: ';
+const PROMPT_PREFIX = 'Read aloud in a warm and friendly tone: ';
 
 function successLog(block, response, length) {
     log('---------------------------------------------------------------------------');

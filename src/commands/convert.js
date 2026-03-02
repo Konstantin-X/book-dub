@@ -1,5 +1,6 @@
 import { extractEpub } from "../services/epubService.js";
 import { logError } from "../utils/logger.js";
+import {extractFB2} from "../services/fb2Service.js";
 
 export async function runConvert() {
     try {
@@ -11,8 +12,8 @@ export async function runConvert() {
                 break;
 
             case '.fb2':
-                //await extractFB2();
-                //break;
+                await extractFB2();
+                break;
 
             default:
                 throw new Error(`Unsupported file extension: ${extension}`);
