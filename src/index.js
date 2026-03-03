@@ -3,6 +3,7 @@ import { Command } from "commander";
 import { runConvert } from "./commands/convert.js";
 import { runSplit } from "./commands/split.js";
 import { runProcess } from "./commands/process.js";
+import { runProcessEleven } from "./commands/process-eleven.js";
 import { runSeed } from "./commands/seed.js";
 import { runEncode } from "./commands/encode.js";
 
@@ -27,6 +28,11 @@ program
     .command("process")
     .description("Process chunks from DB and send to API")
     .action(runProcess);
+
+program
+    .command("process-eleven")
+    .description("Process chunks from DB and send to ElevenLabs API")
+    .action(runProcessEleven);
 
 program
     .command("seed")
