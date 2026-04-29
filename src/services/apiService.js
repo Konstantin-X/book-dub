@@ -9,7 +9,7 @@ const PROMPT_PREFIX = 'Read aloud in a warm and friendly tone: ';
 
 function successLog(block, response, length) {
     log('---------------------------------------------------------------------------');
-    log(`< BOOK: ${block.title} | Block: ${block.id} | Token: ...${process.env.GEMINI_API_KEY.slice(-10)}`);
+    log(`< BOOK: ${block.title} | Block: ${block.id} | Token: ...${process.env.GEMINI_API_KEY.slice(-10)} | File: ${block.number}`);
     log(`  symbols:              ${length}`);
     log('  promptTokenCount:     ' + response.usageMetadata.promptTokenCount);
     log('  candidatesTokenCount: ' + response.usageMetadata.candidatesTokenCount);
@@ -51,7 +51,7 @@ async function processTextForTTS(block) {
         return;
     }
 
-    log(`> BOOK: ${block.title} | Block: ${block.id} | Token: ...${process.env.GEMINI_API_KEY.slice(-10)}`);
+    log(`> BOOK: ${block.title} | Block: ${block.id} | Token: ...${process.env.GEMINI_API_KEY.slice(-10)} | File: ${block.number}`);
 
     DB.updateApiKeyUses(process.env.GEMINI_API_KEY);
 
